@@ -344,38 +344,58 @@ return {
     "nvimdev/dashboard-nvim",
     lazy = false, -- As https://github.com/nvimdev/dashboard-nvim/pull/450, dashboard-nvim shouldn't be lazy-loaded to properly handle stdin.
     opts = function()
-      local logo = [[
-           ██╗      █████╗ ███████╗██╗   ██╗██╗   ██╗██╗███╗   ███╗          Z
-           ██║     ██╔══██╗╚══███╔╝╚██╗ ██╔╝██║   ██║██║████╗ ████║      Z    
-           ██║     ███████║  ███╔╝  ╚████╔╝ ██║   ██║██║██╔████╔██║   z       
-           ██║     ██╔══██║ ███╔╝    ╚██╔╝  ╚██╗ ██╔╝██║██║╚██╔╝██║ z         
-           ███████╗██║  ██║███████╗   ██║    ╚████╔╝ ██║██║ ╚═╝ ██║           
-           ╚══════╝╚═╝  ╚═╝╚══════╝   ╚═╝     ╚═══╝  ╚═╝╚═╝     ╚═╝           
-      ]]
-
-      logo = string.rep("\n", 8) .. logo .. "\n\n"
+      local dashboard_image = {
+        [[                                                                                  ]],
+        [[                       ▄                     ▄ ▀ ■                                ]],
+        [[       ▄ ▀               ▀▄    ▄■▀▀▀■▄      █                ▄■▀▀▀■▄              ]],
+        [[  ░   █▄     ▓▄     ░    ▄█▌  ▀       ▓▄     ▀▀███▄▄     ░ ▄█▄     ▓█▄            ]],
+        [[       ▀███▄ ▓██▄     ▄▄███▄▄▀    ░   ▓██▄▄▄▄▄▄▄█████▄ ░ ▄██▀██▄ ░ ▓██▓  ░     ▄  ]],
+        [[ ▄████▀▀▀▀▀▀ ▓██▓  ▓████▀█▓▓▓█  ▄▄▄▄▄▄▓██▓ ▓██▓  ▓██▓▀ ▄██▓   ▓██▄ ▓██▓ ░░░  ▄█▓   ]],
+        [[    ▀▀▀▀▀▀▓▓▓▓▄▀▓▓▓▀▀▓▓▓▄   ▀▀▀  █▓▓▓▀  ▓▓▓▓ ▓▓▓▓▀▀▓▓▓▄▄ ▓▓▓▓ ░ ▓▓▓▓ ▓▓▓▓ ░░░ ▓▓▓▓]],
+        [[ ▒▒▒▒▒  ▐▒▒▒▒█▐▒▒  ▐▒▒▒▒ ▓▓▓▓▓▐▒▒▒▒ ░ ▒▒▒▒ ▒▒▒▒  ▐▒▒▒▒█▄▒▒▒ ░ ▒▒▒▒ ▒▒▒▒ ░░░ ▒▒▒▒  ]],
+        [[ ░░░░░ ░ ░░░░░▌░░ ░ ░░░░░░░░░░▐░░░░ ░ ░░░░ ░░░░ ░ ░░░░░░░░░ ░ ░░░░ ░░░░  ▄  ░░░░  ]],
+        [[ ▒▒▒▒▒ ░ ▒▒▒▒▒▌▒▒ ░ ▒▒▒▒▒▄▒▒▒▒▒▒▒▒▒ ░ ▒▒▒▒ ▒▒▒▒ ░ ▒▒▒▒▒▌▒▒▒ ░ ▒▒▒▒ ▒▒▓▀▄███▄▀▓▒▒  ]],
+        [[ ▐▓▓▓▓ ░▐▓▓▓▓▓▓▓▓ ░▐▓▓▓▓▓▌▓▓▓▓▐▓▓▓▓▌  ▓▓▓▓ ▓▓▓▓ ░▐▓▓▓▓▓▓▓▓▓ ░ ▓▓▓▓ ▓▓▓▓▓▀ ▀▓▓▓▓▓  ]],
+        [[  ▀██▓ ▄█▓██▀▄██▀  ▓████▓███▀  ▓███▓▄▄▓██▓▄▓█▀   ▓███▓ ▀██▓   ▓██▀ ▓██▀ ░ ░ ▀██▓  ]],
+        [[ ░  ▀▄██▀▀   █▀   ▄█▓██▀ █▀  ░  █████▀▀▀   ▀  ░ ▐██▓█▌ ░ ▀██▄██▀ ░ ▓▀   ░     ▀█  ]],
+        [[   ▄▀▀    ░     ▄███▀▀  ░ ▀■▄▄■▀ ▀▀████▄▄▄■▀  ░  ▀▀███▄▄▄▄▄██▀ Eboy               ]],
+        [[   ▀▄▄■▀     ■▀▀                                     ▀▀▀▀▀▀                       ]],
+        [[                           S   K   i   D   R   O   W                              ]],
+        [[                                                                                  ]],
+        [[                   ->  T H E   L E A D i N G   F O R C E   <                      ]],
+        [[                                                                                  ]],
+        [[                                                                                  ]],
+      }
 
       local opts = {
-        theme = "doom",
-        hide = {
-          -- this is taken care of by lualine
-          -- enabling this messes up the actual laststatus setting after loading a file
-          statusline = false,
-        },
+        theme = "hyper",
         config = {
-          header = vim.split(logo, "\n"),
-          -- stylua: ignore
-          center = {
-            { action = 'lua LazyVim.pick()()',                           desc = " Find File",       icon = " ", key = "f" },
-            { action = "ene | startinsert",                              desc = " New File",        icon = " ", key = "n" },
-            { action = 'lua LazyVim.pick("oldfiles")()',                 desc = " Recent Files",    icon = " ", key = "r" },
-            { action = 'lua LazyVim.pick("live_grep")()',                desc = " Find Text",       icon = " ", key = "g" },
-            { action = 'lua LazyVim.pick.config_files()()',              desc = " Config",          icon = " ", key = "c" },
-            { action = 'lua require("persistence").load()',              desc = " Restore Session", icon = " ", key = "s" },
-            { action = "LazyExtras",                                     desc = " Lazy Extras",     icon = " ", key = "x" },
-            { action = "Lazy",                                           desc = " Lazy",            icon = "󰒲 ", key = "l" },
-            { action = function() vim.api.nvim_input("<cmd>qa<cr>") end, desc = " Quit",            icon = " ", key = "q" },
+          header = dashboard_image,
+          hide = {
+            statusline = false, -- hide statusline default is true
           },
+          shortcut = {
+            -- action can be a function type
+            {
+              icon = " ",
+              icon_hl = "@variable",
+              desc = "Files",
+              group = "Label",
+              action = "Telescope find_files",
+              key = "f",
+            },
+            { action = "Lazy", group = "@property", desc = " Lazy", icon = "󰒲 ", key = "l" },
+            { action = "LazyExtras", group = "DiagnosticHint", desc = " Lazy Extras", icon = " ", key = "x" },
+            { action = "Telescope live_grep", group = "Number", desc = " Find Text", icon = " ", key = "g" },
+            { action = 'lua require("persistence").load()', desc = " Restore Session", icon = " ", key = "s" },
+            { action = "qa", desc = " Quit", icon = " ", key = "q" },
+          },
+          packages = { enable = true }, -- show how many plugins neovim loaded
+          -- limit how many projects list, action when you press key or enter it will run this action.
+          -- action can be a functino type, e.g.
+          -- action = func(path) vim.cmd('Telescope find_files cwd=' .. path) end
+          project = { enable = true, limit = 8, icon = "your icon", label = "", action = "Telescope find_files cwd=" },
+          mru = { limit = 10, icon = "your icon", label = "", cwd_only = false },
           footer = function()
             local stats = require("lazy").stats()
             local ms = (math.floor(stats.startuptime * 100 + 0.5) / 100)
@@ -383,11 +403,6 @@ return {
           end,
         },
       }
-
-      for _, button in ipairs(opts.config.center) do
-        button.desc = button.desc .. string.rep(" ", 43 - #button.desc)
-        button.key_format = "  %s"
-      end
 
       -- open dashboard after closing lazy
       if vim.o.filetype == "lazy" then
